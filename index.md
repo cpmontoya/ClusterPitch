@@ -23,38 +23,47 @@ knit        : slidify::knit2slides
 
 * The user can choose which two sets of data to use and how many clusters to identify
 
-* The k-means algorithm randomly chooses 25 different starting centers and then finds the best answer
+* The k-means algorithm randomly picks 25 starting centers and finds the best answer
 
---- .class #id 
+* The user can compare k-means to the actual data with the "Show Actual Clusters" checkbox
 
-## How does ShinyClusters do?
-
-* The iris data contains actual species assignments
-
-* Clicking the actual checkbox will change the cluster assignments to the actual species
+* With 3 Clusters chosen the k-means compares favarably at least visually to the actual species
 
 ---
 
 ## How could one decide how many clusters to choose?
 
-* By running the algorithm for a range of clusters and comparing the withinss parameter in the plot below
-
 
 ```r
 library(ggplot2)
-pdata<-iris['Petal.Length','Sepal.Width']
-qplot(c(1:10),sapply(c(1:10),function(x) kmeans(pdata,center=x,nstart=10)$tot.withinss),geom="point",xlab="Number of Clusters",ylab="Total deviations within clusters",main= "Choosing the number of Clusters",size=I(6))+geom_line(size=2)
+pdata<-iris[c('Petal.Length','Sepal.Width')]
+ydata<-sapply(c(1:10),function(x) kmeans(pdata,center=x,nstart=10)$tot.withinss)
+lab<- c("Number of Clusters","Total Withinss")
+qplot(c(1:10),ydata,geom="point",xlab=lab[1],ylab=lab[2],size=I(6))+geom_line(size=2)
 ```
 
-```
-## Error: NA/NaN/Inf in foreign function call (arg 1)
-```
-
-* The elbow of the graph indcates diminishing returns from adding clusters and so my be the best choice
+![plot of chunk unnamed-chunk-1](assets/fig/unnamed-chunk-1.png) 
+* The elbow of the graph between two and three clusters indcates diminishing returns from adding clusters after 3 clusters, suggesting this might be an optimal choice
 
 ---
 
 ## What impovements could be made?
 
+* Use "Choose File widget" to make it possible for user to select data to apply app to
+
 * Perhaps use different starts to compute average cluster id (soft clusters rather than hard)
+
+* Try to average across different data dimensions to impove accuracy
+
+* Also try to offer PCA components as options for k-means dimensions to imporve accuracy
+
+* Try to automate choice of number of clusters using plot of withinss versus number of clusters
+
+---
+
+## Check the app out for your self!
+
+- The app can be found at this link: [http://cpmontoya.shinyapps.io/shinyClusters](http://cpmontoya.shinyapps.io/shinyClusters)
+
+- You can look at the code on github here: [http://github.com/cpmontoya/shinyClusters.git](http://github.com/cpmontoya/shinyClusters.git)
 

@@ -54,21 +54,31 @@
 <li><p>ShinyClusters uses the k-means algorithm available in r to identify the clusters</p></li>
 <li><p>ShinyCluster currently is limited to analyses of the iris data included in r</p></li>
 <li><p>The user can choose which two sets of data to use and how many clusters to identify</p></li>
-<li><p>The k-means algorithm randomly chooses 25 different starting centers and then finds the best answer</p></li>
+<li><p>The k-means algorithm randomly picks 25 starting centers and finds the best answer</p></li>
+<li><p>The user can compare k-means to the actual data with the &quot;Show Actual Clusters&quot; checkbox</p></li>
+<li><p>With 3 Clusters chosen the k-means compares favarably at least visually to the actual species</p></li>
 </ul>
 
   </article>
   <!-- Presenter Notes -->
 </slide>
 
-<slide class="class" id="id" style="background:;">
+<slide class="" id="slide-2" style="background:;">
   <hgroup>
-    <h2>How does ShinyClusters do?</h2>
+    <h2>How could one decide how many clusters to choose?</h2>
   </hgroup>
   <article data-timings="">
-    <ul>
-<li><p>The iris data contains actual species assignments</p></li>
-<li><p>Clicking the actual checkbox will change the cluster assignments to the actual species</p></li>
+    <pre><code class="r">library(ggplot2)
+pdata&lt;-iris[c(&#39;Petal.Length&#39;,&#39;Sepal.Width&#39;)]
+ydata&lt;-sapply(c(1:10),function(x) kmeans(pdata,center=x,nstart=10)$tot.withinss)
+lab&lt;- c(&quot;Number of Clusters&quot;,&quot;Total Withinss&quot;)
+qplot(c(1:10),ydata,geom=&quot;point&quot;,xlab=lab[1],ylab=lab[2],size=I(6))+geom_line(size=2)
+</code></pre>
+
+<p><img src="assets/fig/unnamed-chunk-1.png" alt="plot of chunk unnamed-chunk-1"> </p>
+
+<ul>
+<li>The elbow of the graph between two and three clusters indcates diminishing returns from adding clusters after 3 clusters, suggesting this might be an optimal choice</li>
 </ul>
 
   </article>
@@ -77,23 +87,15 @@
 
 <slide class="" id="slide-3" style="background:;">
   <hgroup>
-    <h2>How could one decide how many clusters to choose?</h2>
+    <h2>What impovements could be made?</h2>
   </hgroup>
   <article data-timings="">
     <ul>
-<li>By running the algorithm for a range of clusters and comparing the withinss parameter in the plot below</li>
-</ul>
-
-<pre><code class="r">library(ggplot2)
-pdata&lt;-iris[&#39;Petal.Length&#39;,&#39;Sepal.Width&#39;]
-qplot(c(1:10),sapply(c(1:10),function(x) kmeans(pdata,center=x,nstart=10)$tot.withinss),geom=&quot;point&quot;,xlab=&quot;Number of Clusters&quot;,ylab=&quot;Total deviations within clusters&quot;,main= &quot;Choosing the number of Clusters&quot;,size=I(6))+geom_line(size=2)
-</code></pre>
-
-<pre><code>## Error: NA/NaN/Inf in foreign function call (arg 1)
-</code></pre>
-
-<ul>
-<li>The elbow of the graph indcates diminishing returns from adding clusters and so my be the best choice</li>
+<li><p>Use &quot;Choose File widget&quot; to make it possible for user to select data to apply app to</p></li>
+<li><p>Perhaps use different starts to compute average cluster id (soft clusters rather than hard)</p></li>
+<li><p>Try to average across different data dimensions to impove accuracy</p></li>
+<li><p>Also try to offer PCA components as options for k-means dimensions to imporve accuracy</p></li>
+<li><p>Try to automate choice of number of clusters using plot of withinss versus number of clusters</p></li>
 </ul>
 
   </article>
@@ -102,11 +104,12 @@ qplot(c(1:10),sapply(c(1:10),function(x) kmeans(pdata,center=x,nstart=10)$tot.wi
 
 <slide class="" id="slide-4" style="background:;">
   <hgroup>
-    <h2>What impovements could be made?</h2>
+    <h2>Check the app out for your self!</h2>
   </hgroup>
   <article data-timings="">
     <ul>
-<li>Perhaps use different starts to compute average cluster id (soft clusters rather than hard)</li>
+<li><p>The app can be found at this link: <a href="http://cpmontoya.shinyapps.io/shinyClusters">http://cpmontoya.shinyapps.io/shinyClusters</a></p></li>
+<li><p>You can look at the code on github here: <a href="http://github.com/cpmontoya/shinyClusters.git">http://github.com/cpmontoya/shinyClusters.git</a></p></li>
 </ul>
 
   </article>
@@ -125,19 +128,19 @@ qplot(c(1:10),sapply(c(1:10),function(x) kmeans(pdata,center=x,nstart=10)$tot.wi
     </li>
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=2 title='How does ShinyClusters do?'>
+        data-slide=2 title='How could one decide how many clusters to choose?'>
          2
       </a>
     </li>
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=3 title='How could one decide how many clusters to choose?'>
+        data-slide=3 title='What impovements could be made?'>
          3
       </a>
     </li>
     <li>
       <a href="#" target="_self" rel='tooltip' 
-        data-slide=4 title='What impovements could be made?'>
+        data-slide=4 title='Check the app out for your self!'>
          4
       </a>
     </li>
